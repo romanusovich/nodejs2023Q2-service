@@ -4,6 +4,7 @@ import { Album } from "./album/entities/album.entity";
 import { CreateArtistDto } from "./artist/dto/create-artist.dto";
 import { UpdateArtistDto } from "./artist/dto/update-artist.dto";
 import { Artist } from "./artist/entities/artist.entity";
+import { Favorite } from "./favorites/entities/favorite.entity";
 import { CreateTrackDto } from "./track/dto/create-track.dto";
 import { UpdateTrackDto } from "./track/dto/update-track.dto";
 import { Track } from "./track/entities/track.entity";
@@ -16,6 +17,7 @@ class FakeDB {
     artists: Artist[] = [];
     albums: Album[] = [];
     tracks: Track[] = [];
+    favorites: Favorite = new Favorite();
 
     createUser(createUserDto: CreateUserDto) {
         let newUser = new User(createUserDto.login, createUserDto.password);
@@ -137,6 +139,57 @@ class FakeDB {
         if (!track) return track;
         this.tracks.splice(this.tracks.indexOf(track), 1);
         return track;
+    }
+
+    findAllFavorites() {
+        const response = {
+            artists: db.artists.filter((artist) => this.favorites.artists.indexOf(artist.id) !== -1),
+            albums: db.albums.filter((album) => this.favorites.albums.indexOf(album.id) !== -1),
+            tracks: db.tracks.filter((track) => this.favorites.tracks.indexOf(track.id) !== -1)
+        };
+        return response;
+    }
+
+    addTrackToF(id: string) {
+        const track = this.findOneTrack(id);
+        if (!track) return track;
+        this.favorites.tracks.push(track.id);
+        return track;
+    }
+
+    removeTrackFromF(id: string) {
+        const trackId = this.favorites.tracks.indexOf(id);
+        if (trackId === -1) return false;
+        this.favorites.tracks.splice(trackId, 1);
+        return true;
+    }
+
+    addAlbumToF(id: string) {
+        const album = this.findOneAlbum(id);
+        if (!album) return album;
+        this.favorites.albums.push(album.id);
+        return album;
+    }
+
+    removeAlbumFromF(id: string) {
+        const albumId = this.favorites.albums.indexOf(id);
+        if (albumId === -1) return false;
+        this.favorites.albums.splice(albumId, 1);
+        return true;
+    }
+
+    addArtistToF(id: string) {
+        const artist = this.findOneArtist(id);
+        if (!artist) return artist;
+        this.favorites.artists.push(artist.id);
+        return artist;
+    }
+
+    removeArtistFromF(id: string) {
+        const artistId = this.favorites.artists.indexOf(id);
+        if (artistId === -1) return false;
+        this.favorites.artists.splice(artistId, 1);
+        return true;
     }
 }
 
