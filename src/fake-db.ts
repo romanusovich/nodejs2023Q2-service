@@ -26,18 +26,27 @@ class FakeDB {
     }
 
     findAllUsers() {
-        return this.users;
+        const response: User[] = this.users;
+        response.forEach((user) => {
+            delete user.password;
+        });
+        return response;
     }
 
     findOneUser(id: string) {
         let user = this.users.filter((use) => use.id === id)[0];
+        delete user.password;
         return user;
     }
 
     updateUser(id: string, updateUserDto: UpdateUserDto) {
         const user = this.users.filter((use) => use.id === id)[0];
         if (!user) return user;
-        if (user.password === updateUserDto.oldPassword) user.password = updateUserDto.newPassword;
+        if (user.password === updateUserDto.oldPassword) { 
+            user.password = updateUserDto.newPassword; 
+            user.updatedAt = Date.now();
+            user.version++;
+        }
         return user;
     }
 
