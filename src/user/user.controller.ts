@@ -29,9 +29,8 @@ export class UserController {
   @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    if (updateUserDto.newPassword === updateUserDto.oldPassword
-      || updateUserDto.newPassword.length < 8) throw new ForbiddenException('new password is wrong');
     const user = this.userService.update(id, updateUserDto);
+    if (user.password !== updateUserDto.newPassword) throw new ForbiddenException('old password is wrong');
     if (!user) throw new NotFoundException('user is not found');
     else return user;
   }
