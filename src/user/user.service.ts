@@ -1,38 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
-
-const users: User[] = [];
+import { db } from '../fake-db';
 
 @Injectable()
 export class UserService {
   create(createUserDto: CreateUserDto) {
-    let newUser = new User(createUserDto.login, createUserDto.password);
-    users.push(newUser);
-    return newUser;
+    return db.createUser(createUserDto);
   }
 
   findAll() {
-    return users;
+    return db.findAllUsers();
   }
 
   findOne(id: string) {
-    let user = users.filter((use) => use.id === id)[0];
-    return user;
+    return db.findOneUser(id);
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    const user = users.filter((use) => use.id === id)[0];
-    if (!user) return user;
-    user.password = updateUserDto.newPassword;
-    return user;
+    return db.updateUser(id, updateUserDto);
   }
 
   remove(id: string) {
-    const user = users.filter((use) => use.id === id)[0];
-    if (!user) return user;
-    users.splice(users.indexOf(user), 1);
-    return user;
+    return db.removeUser(id);
   }
 }
