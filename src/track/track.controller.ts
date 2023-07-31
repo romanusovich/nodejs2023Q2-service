@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, HttpCode, BadRequestException, NotFoundException } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { isUUID } from 'class-validator';
 
 @Controller('track')
 export class TrackController {
@@ -19,16 +20,26 @@ export class TrackController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.trackService.findOne(+id);
+    if (!isUUID(id)) throw new BadRequestException('id is not uuid');
+    const track = this.trackService.findOne(id);
+    if (!track) throw new NotFoundException('track is not found');
+    else return track;
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
-    return this.trackService.update(+id, updateTrackDto);
+    if (!isUUID(id)) throw new BadRequestException('id is not uuid');
+    const track = this.trackService.update(id, updateTrackDto);
+    if (!track) throw new NotFoundException('track is not found');
+    else return track;
   }
 
   @Delete(':id')
+  @HttpCode(204)
   remove(@Param('id') id: string) {
-    return this.trackService.remove(+id);
+    if (!isUUID(id)) throw new BadRequestException('id is not uuid');
+    const track = this.trackService.remove(id);
+    if (!track) throw new NotFoundException('track is not found');
+    else return track;
   }
 }

@@ -4,6 +4,9 @@ import { Album } from "./album/entities/album.entity";
 import { CreateArtistDto } from "./artist/dto/create-artist.dto";
 import { UpdateArtistDto } from "./artist/dto/update-artist.dto";
 import { Artist } from "./artist/entities/artist.entity";
+import { CreateTrackDto } from "./track/dto/create-track.dto";
+import { UpdateTrackDto } from "./track/dto/update-track.dto";
+import { Track } from "./track/entities/track.entity";
 import { CreateUserDto } from "./user/dto/create-user.dto";
 import { UpdateUserDto } from "./user/dto/update-user.dto";
 import { User } from "./user/entities/user.entity";
@@ -12,6 +15,7 @@ class FakeDB {
     users: User[] = [];
     artists: Artist[] = [];
     albums: Album[] = [];
+    tracks: Track[] = [];
 
     createUser(createUserDto: CreateUserDto) {
         let newUser = new User(createUserDto.login, createUserDto.password);
@@ -101,6 +105,38 @@ class FakeDB {
         if (!album) return album;
         this.albums.splice(this.albums.indexOf(album), 1);
         return album;
+    }
+
+    createTrack(createTrackDto: CreateTrackDto) {
+        let newTrack = new Track(createTrackDto.name, createTrackDto.duration, createTrackDto.artistId, createTrackDto.albumId);
+        this.tracks.push(newTrack);
+        return newTrack;
+    }
+
+    findAllTracks() {
+        return this.tracks;
+    }
+
+    findOneTrack(id: string) {
+        let track = this.tracks.filter((trac) => trac.id === id)[0];
+        return track;
+    }
+
+    updateTrack(id: string, updateTrackDto: UpdateTrackDto) {
+        const track = this.tracks.filter((trac) => trac.id === id)[0];
+        if (!track) return track;
+        track.name = updateTrackDto.name;
+        track.duration = updateTrackDto.duration;
+        track.artistId = updateTrackDto.artistId;
+        track.albumId = updateTrackDto.albumId;
+        return track;
+    }
+
+    removeTrack(id: string) {
+        const track = this.tracks.filter((trac) => trac.id === id)[0];
+        if (!track) return track;
+        this.tracks.splice(this.tracks.indexOf(track), 1);
+        return track;
     }
 }
 
