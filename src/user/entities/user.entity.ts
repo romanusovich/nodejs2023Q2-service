@@ -12,7 +12,7 @@ export class User {
     this.id = randomUUID();
     this.login = _login;
     this.password = _password;
-    this.version = 0;
+    this.version = 1;
     this.createdAt = Date.now();
     this.updatedAt = Date.now();
   }

@@ -20,13 +20,15 @@ class FakeDB {
     favorites: Favorite = new Favorite();
 
     createUser(createUserDto: CreateUserDto) {
-        let newUser = new User(createUserDto.login, createUserDto.password);
+        const newUser = new User(createUserDto.login, createUserDto.password);
         this.users.push(newUser);
-        return newUser;
+        const result = { ...newUser };
+        delete result.password;
+        return result;
     }
 
     findAllUsers() {
-        const response: User[] = this.users;
+        const response: User[] = [...this.users];
         response.forEach((user) => {
             delete user.password;
         });
@@ -34,20 +36,24 @@ class FakeDB {
     }
 
     findOneUser(id: string) {
-        let user = this.users.filter((use) => use.id === id)[0];
-        delete user.password;
-        return user;
+        const user = this.users.filter((use) => use.id === id)[0];
+        if (!user) return user;
+        const result = { ...user };
+        delete result.password;
+        return result;
     }
 
     updateUser(id: string, updateUserDto: UpdateUserDto) {
         const user = this.users.filter((use) => use.id === id)[0];
         if (!user) return user;
-        if (user.password === updateUserDto.oldPassword) { 
-            user.password = updateUserDto.newPassword; 
+        if (user.password === updateUserDto.oldPassword) {
+            user.password = updateUserDto.newPassword;
             user.updatedAt = Date.now();
             user.version++;
-        }
-        return user;
+        } else return 'wrong password';
+        const result = { ...user };
+        delete result.password;
+        return result;
     }
 
     removeUser(id: string) {
@@ -58,7 +64,7 @@ class FakeDB {
     }
 
     createArtist(createArtistDto: CreateArtistDto) {
-        let newArtist = new Artist(createArtistDto.name, createArtistDto.grammy);
+        const newArtist = new Artist(createArtistDto.name, createArtistDto.grammy);
         this.artists.push(newArtist);
         return newArtist;
     }
@@ -68,7 +74,7 @@ class FakeDB {
     }
 
     findOneArtist(id: string) {
-        let artist = this.artists.filter((artis) => artis.id === id)[0];
+        const artist = this.artists.filter((artis) => artis.id === id)[0];
         return artist;
     }
 
@@ -95,7 +101,7 @@ class FakeDB {
     }
 
     createAlbum(createAlbumDto: CreateAlbumDto) {
-        let newAlbum = new Album(createAlbumDto.name, createAlbumDto.year, createAlbumDto.artistId);
+        const newAlbum = new Album(createAlbumDto.name, createAlbumDto.year, createAlbumDto.artistId);
         this.albums.push(newAlbum);
         return newAlbum;
     }
@@ -105,7 +111,7 @@ class FakeDB {
     }
 
     findOneAlbum(id: string) {
-        let album = this.albums.filter((albu) => albu.id === id)[0];
+        const album = this.albums.filter((albu) => albu.id === id)[0];
         return album;
     }
 
@@ -130,7 +136,7 @@ class FakeDB {
     }
 
     createTrack(createTrackDto: CreateTrackDto) {
-        let newTrack = new Track(createTrackDto.name, createTrackDto.duration, createTrackDto.artistId, createTrackDto.albumId);
+        const newTrack = new Track(createTrackDto.name, createTrackDto.duration, createTrackDto.artistId, createTrackDto.albumId);
         this.tracks.push(newTrack);
         return newTrack;
     }
@@ -140,7 +146,7 @@ class FakeDB {
     }
 
     findOneTrack(id: string) {
-        let track = this.tracks.filter((trac) => trac.id === id)[0];
+        const track = this.tracks.filter((trac) => trac.id === id)[0];
         return track;
     }
 
