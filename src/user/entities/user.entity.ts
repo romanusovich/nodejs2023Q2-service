@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto";
+import { randomUUID } from 'crypto';
 
 export class User {
   id: string; // uuid v4

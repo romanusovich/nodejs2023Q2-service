@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, BadRequestException, HttpCode, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  BadRequestException,
+  HttpCode,
+  NotFoundException,
+} from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
@@ -6,7 +17,7 @@ import { isUUID } from 'class-validator';
 
 @Controller('album')
 export class AlbumController {
-  constructor(private readonly albumService: AlbumService) { }
+  constructor(private readonly albumService: AlbumService) {}
 
   @Post()
   create(@Body() createAlbumDto: CreateAlbumDto) {

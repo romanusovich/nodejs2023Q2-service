@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Param, Delete, BadRequestException, NotFoundException, HttpStatus, HttpException, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Delete,
+  BadRequestException,
+  NotFoundException,
+  HttpStatus,
+  HttpException,
+  HttpCode,
+} from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { isUUID } from 'class-validator';
 
@@ -15,7 +26,11 @@ export class FavoritesController {
   addTrack(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
     const track = this.favoritesService.addTrack(id);
-    if (!track) throw new HttpException('track is not found', HttpStatus.UNPROCESSABLE_ENTITY);
+    if (!track)
+      throw new HttpException(
+        'track is not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     else return track;
   }
 
@@ -32,7 +47,11 @@ export class FavoritesController {
   addAlbum(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
     const album = this.favoritesService.addAlbum(id);
-    if (!album) throw new HttpException('album is not found', HttpStatus.UNPROCESSABLE_ENTITY);
+    if (!album)
+      throw new HttpException(
+        'album is not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     else return album;
   }
 
@@ -49,7 +68,11 @@ export class FavoritesController {
   addArtist(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
     const artist = this.favoritesService.addArtist(id);
-    if (!artist) throw new HttpException('artist is not found', HttpStatus.UNPROCESSABLE_ENTITY);
+    if (!artist)
+      throw new HttpException(
+        'artist is not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     else return artist;
   }
 

@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Param, Delete, BadRequestException, NotFoundException, HttpCode, ForbiddenException, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  BadRequestException,
+  NotFoundException,
+  HttpCode,
+  ForbiddenException,
+  Put,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -6,7 +18,7 @@ import { isUUID } from 'class-validator';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -31,7 +43,8 @@ export class UserController {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
     const user = this.userService.update(id, updateUserDto);
     if (!user) throw new NotFoundException('user is not found');
-    if (user === 'wrong password') throw new ForbiddenException('old password is wrong');
+    if (user === 'wrong password')
+      throw new ForbiddenException('old password is wrong');
     else return user;
   }
 
