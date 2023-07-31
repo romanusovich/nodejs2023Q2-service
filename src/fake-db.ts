@@ -83,6 +83,13 @@ class FakeDB {
     removeArtist(id: string) {
         const artist = this.artists.filter((artis) => artis.id === id)[0];
         if (!artist) return artist;
+        db.tracks.forEach((track) => {
+            if (track.artistId === artist.id) track.artistId = null;
+        });
+        db.albums.forEach((album) => {
+            if (album.artistId === artist.id) album.artistId = null;
+        });
+        this.removeArtistFromF(artist.id);
         this.artists.splice(this.artists.indexOf(artist), 1);
         return artist;
     }
@@ -114,6 +121,10 @@ class FakeDB {
     removeAlbum(id: string) {
         const album = this.albums.filter((albu) => albu.id === id)[0];
         if (!album) return album;
+        db.tracks.forEach((track) => {
+            if (track.albumId === album.id) track.albumId = null;
+        });
+        this.removeAlbumFromF(album.id);
         this.albums.splice(this.albums.indexOf(album), 1);
         return album;
     }
@@ -146,6 +157,7 @@ class FakeDB {
     removeTrack(id: string) {
         const track = this.tracks.filter((trac) => trac.id === id)[0];
         if (!track) return track;
+        this.removeTrackFromF(track.id);
         this.tracks.splice(this.tracks.indexOf(track), 1);
         return track;
     }
