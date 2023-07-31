@@ -1,3 +1,6 @@
+import { CreateAlbumDto } from "./album/dto/create-album.dto";
+import { UpdateAlbumDto } from "./album/dto/update-album.dto";
+import { Album } from "./album/entities/album.entity";
 import { CreateArtistDto } from "./artist/dto/create-artist.dto";
 import { UpdateArtistDto } from "./artist/dto/update-artist.dto";
 import { Artist } from "./artist/entities/artist.entity";
@@ -8,6 +11,7 @@ import { User } from "./user/entities/user.entity";
 class FakeDB {
     users: User[] = [];
     artists: Artist[] = [];
+    albums: Album[] = [];
 
     createUser(createUserDto: CreateUserDto) {
         let newUser = new User(createUserDto.login, createUserDto.password);
@@ -66,6 +70,37 @@ class FakeDB {
         if (!artist) return artist;
         this.artists.splice(this.artists.indexOf(artist), 1);
         return artist;
+    }
+
+    createAlbum(createAlbumDto: CreateAlbumDto) {
+        let newAlbum = new Album(createAlbumDto.name, createAlbumDto.year, createAlbumDto.artistId);
+        this.albums.push(newAlbum);
+        return newAlbum;
+    }
+
+    findAllAlbums() {
+        return this.albums;
+    }
+
+    findOneAlbum(id: string) {
+        let album = this.albums.filter((albu) => albu.id === id)[0];
+        return album;
+    }
+
+    updateAlbum(id: string, updateAlbumDto: UpdateAlbumDto) {
+        const album = this.albums.filter((albu) => albu.id === id)[0];
+        if (!album) return album;
+        album.name = updateAlbumDto.name;
+        album.year = updateAlbumDto.year;
+        album.artistId = updateAlbumDto.artistId;
+        return album;
+    }
+
+    removeAlbum(id: string) {
+        const album = this.albums.filter((albu) => albu.id === id)[0];
+        if (!album) return album;
+        this.albums.splice(this.albums.indexOf(album), 1);
+        return album;
     }
 }
 
