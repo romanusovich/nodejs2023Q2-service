@@ -1,33 +1,63 @@
 import { Injectable } from '@nestjs/common';
 import { db } from '../fake-db';
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
 @Injectable()
 export class FavoritesService {
-  findAll() {
-    return db.findAllFavorites();
+  async findAll() {
+    return {
+      artists: await prisma.favoriteArtist.findMany(),
+      albums: await prisma.favoriteAlbum.findMany(),
+      tracks: await prisma.favoriteTrack.findMany(),
+    }
   }
 
-  addTrack(id: string) {
-    return db.addTrackToF(id);
+  async addTrack(id: string) {
+    return await prisma.favoriteTrack.create({
+      data: {
+        trackId: id
+      }
+    })
   }
 
-  removeTrack(id: string) {
-    return db.removeTrackFromF(id);
+  async removeTrack(id: string) {
+    return await prisma.favoriteTrack.delete({
+      where: {
+        trackId: id
+      }
+    })
   }
 
-  addAlbum(id: string) {
-    return db.addAlbumToF(id);
+  async addAlbum(id: string) {
+    return await prisma.favoriteAlbum.create({
+      data: {
+        albumId: id
+      }
+    })
   }
 
-  removeAlbum(id: string) {
-    return db.removeAlbumFromF(id);
+  async removeAlbum(id: string) {
+    return await prisma.favoriteAlbum.delete({
+      where: {
+        albumId: id
+      }
+    })
   }
 
-  addArtist(id: string) {
-    return db.addArtistToF(id);
+  async addArtist(id: string) {
+    return await prisma.favoriteArtist.create({
+      data: {
+        artistId: id
+      }
+    })
   }
 
-  removeArtist(id: string) {
-    return db.removeArtistFromF(id);
+  async removeArtist(id: string) {
+    return await prisma.favoriteArtist.delete({
+      where: {
+        artistId: id
+      }
+    })
   }
 }
