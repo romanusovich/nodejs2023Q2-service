@@ -23,9 +23,9 @@ export class FavoritesController {
   }
 
   @Post('track/:id')
-  addTrack(@Param('id') id: string) {
+  async addTrack(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const track = this.favoritesService.addTrack(id);
+    const track = await this.favoritesService.addTrack(id);
     if (!track)
       throw new HttpException(
         'track is not found',
@@ -36,17 +36,17 @@ export class FavoritesController {
 
   @Delete('track/:id')
   @HttpCode(204)
-  removeTrack(@Param('id') id: string) {
+  async removeTrack(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const isDeleted = this.favoritesService.removeTrack(id);
+    const isDeleted = await this.favoritesService.removeTrack(id);
     if (!isDeleted) throw new NotFoundException('track is not favorite');
     else return 'deleted';
   }
 
   @Post('album/:id')
-  addAlbum(@Param('id') id: string) {
+  async addAlbum(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const album = this.favoritesService.addAlbum(id);
+    const album = await this.favoritesService.addAlbum(id);
     if (!album)
       throw new HttpException(
         'album is not found',
@@ -57,17 +57,17 @@ export class FavoritesController {
 
   @Delete('album/:id')
   @HttpCode(204)
-  removeAlbum(@Param('id') id: string) {
+  async removeAlbum(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const isDeleted = this.favoritesService.removeAlbum(id);
+    const isDeleted = await this.favoritesService.removeAlbum(id);
     if (!isDeleted) throw new NotFoundException('track is not favorite');
     else return 'deleted';
   }
 
   @Post('artist/:id')
-  addArtist(@Param('id') id: string) {
+  async addArtist(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const artist = this.favoritesService.addArtist(id);
+    const artist = await this.favoritesService.addArtist(id);
     if (!artist)
       throw new HttpException(
         'artist is not found',
@@ -78,9 +78,9 @@ export class FavoritesController {
 
   @Delete('artist/:id')
   @HttpCode(204)
-  removeArtist(@Param('id') id: string) {
+  async removeArtist(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const isDeleted = this.favoritesService.removeArtist(id);
+    const isDeleted = await this.favoritesService.removeArtist(id);
     if (!isDeleted) throw new NotFoundException('track is not favorite');
     else return 'deleted';
   }
