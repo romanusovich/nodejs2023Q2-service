@@ -7,9 +7,39 @@ const prisma = new PrismaClient()
 export class FavoritesService {
   async findAll() {
     return {
-      artists: await prisma.favoriteArtist.findMany(),
-      albums: await prisma.favoriteAlbum.findMany(),
-      tracks: await prisma.favoriteTrack.findMany(),
+      artists: await prisma.favoriteArtist.findMany({
+        select: {
+          artist: {
+            select: {
+              id: true,
+              grammy: true,
+              name: true
+            }
+          }
+        }
+      }),
+      albums: await prisma.favoriteAlbum.findMany({
+        select: {
+          album: {
+            select: {
+              id: true,
+              name: true,
+              year: true
+            }
+          }
+        }
+      }),
+      tracks: await prisma.favoriteTrack.findMany({
+        select: {
+          track: {
+            select: {
+              id: true,
+              name: true,
+              duration: true
+            }
+          }
+        }
+      }),
     }
   }
 

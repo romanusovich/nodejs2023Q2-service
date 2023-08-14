@@ -33,9 +33,9 @@ export class UserController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const user = this.userService.findOne(id);
+    const user = await this.userService.findOne(id);
     if (!user) throw new NotFoundException('user is not found');
-    else return await user;
+    else return user;
   }
 
   @Put(':id')
@@ -55,7 +55,7 @@ export class UserController {
   @HttpCode(204)
   async remove(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const user = this.userService.remove(id);
+    const user = await this.userService.remove(id);
     if (!user) throw new NotFoundException('user is not found');
     else return 'deleted';
   }
