@@ -26,6 +26,8 @@ export class AlbumService {
   }
 
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
+    const album = await this.findOne(id);
+    if (!album) return null;
     return await prisma.album.update({
       where: {
         id: id
@@ -35,6 +37,8 @@ export class AlbumService {
   }
 
   async remove(id: string) {
+    const album = await this.findOne(id);
+    if (!album) return null;
     return await prisma.album.delete({
       where: {
         id: id
