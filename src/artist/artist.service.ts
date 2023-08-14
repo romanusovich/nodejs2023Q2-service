@@ -26,18 +26,19 @@ export class ArtistService {
   }
 
   async update(id: string, updateArtistDto: UpdateArtistDto) {
+    const artist = await this.findOne(id);
+    if (!artist) return null;
     return await prisma.artist.update({
       where: {
         id: id
       },
-      data: {
-        name: updateArtistDto.name,
-        grammy: updateArtistDto.grammy,
-      }
+      data: updateArtistDto
     })
   }
 
   async remove(id: string) {
+    const artist = await this.findOne(id);
+    if (!artist) return null;
     return await prisma.artist.delete({
       where: {
         id: id,
