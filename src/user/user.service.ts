@@ -1,27 +1,85 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { db } from '../fake-db';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return db.createUser(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    return await prisma.user.create({
+      data: createUserDto,
+      select: {
+        id: true,
+        login: true,
+        version: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
-  findAll() {
-    return db.findAllUsers();
+  async findAll() {
+    return await prisma.user.findMany({
+      select: {
+        id: true,
+        login: true,
+        version: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
-  findOne(id: string) {
-    return db.findOneUser(id);
+  async findOne(id: string) {
+    return await prisma.user.findFirst({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        login: true,
+        version: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return db.updateUser(id, updateUserDto);
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: id,
+      },
+    });
+    if (!user) return null;
+    if (user?.password !== updateUserDto.oldPassword)
+      throw new Error('wrong password');
+    return await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        password: updateUserDto.newPassword,
+        version: user.version + 1,
+      },
+      select: {
+        id: true,
+        login: true,
+        version: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
-  remove(id: string) {
-    return db.removeUser(id);
+  async remove(id: string) {
+    const user = await this.findOne(id);
+    if (!user) return null;
+    return await prisma.user.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 }
