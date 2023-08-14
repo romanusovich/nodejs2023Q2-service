@@ -38,7 +38,10 @@ export class AlbumController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateAlbumDto: UpdateAlbumDto,
+  ) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
     const album = await this.albumService.update(id, updateAlbumDto);
     if (!album) throw new NotFoundException('album is not found');

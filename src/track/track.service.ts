@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { db } from '../fake-db';
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 @Injectable()
 export class TrackService {
   async create(createTrackDto: CreateTrackDto) {
     return await prisma.track.create({
-      data: createTrackDto
+      data: createTrackDto,
     });
   }
 
@@ -20,8 +20,8 @@ export class TrackService {
   async findOne(id: string) {
     return await prisma.track.findFirst({
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
@@ -30,10 +30,10 @@ export class TrackService {
     if (!track) return null;
     return await prisma.track.update({
       where: {
-        id: id
+        id: id,
       },
-      data: updateTrackDto
-    })
+      data: updateTrackDto,
+    });
   }
 
   async remove(id: string) {
@@ -41,8 +41,8 @@ export class TrackService {
     if (!track) return null;
     return await prisma.track.delete({
       where: {
-        id: id
-      }
-    })
+        id: id,
+      },
+    });
   }
 }

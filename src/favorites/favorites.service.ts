@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { db } from '../fake-db';
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 @Injectable()
 export class FavoritesService {
@@ -13,10 +12,10 @@ export class FavoritesService {
             select: {
               id: true,
               grammy: true,
-              name: true
-            }
-          }
-        }
+              name: true,
+            },
+          },
+        },
       }),
       albums: await prisma.favoriteAlbum.findMany({
         select: {
@@ -24,10 +23,10 @@ export class FavoritesService {
             select: {
               id: true,
               name: true,
-              year: true
-            }
-          }
-        }
+              year: true,
+            },
+          },
+        },
       }),
       tracks: await prisma.favoriteTrack.findMany({
         select: {
@@ -35,59 +34,59 @@ export class FavoritesService {
             select: {
               id: true,
               name: true,
-              duration: true
-            }
-          }
-        }
+              duration: true,
+            },
+          },
+        },
       }),
-    }
+    };
   }
 
   async addTrack(id: string) {
     return await prisma.favoriteTrack.create({
       data: {
-        trackId: id
-      }
-    })
+        trackId: id,
+      },
+    });
   }
 
   async removeTrack(id: string) {
     return await prisma.favoriteTrack.delete({
       where: {
-        trackId: id
-      }
-    })
+        trackId: id,
+      },
+    });
   }
 
   async addAlbum(id: string) {
     return await prisma.favoriteAlbum.create({
       data: {
-        albumId: id
-      }
-    })
+        albumId: id,
+      },
+    });
   }
 
   async removeAlbum(id: string) {
     return await prisma.favoriteAlbum.delete({
       where: {
-        albumId: id
-      }
-    })
+        albumId: id,
+      },
+    });
   }
 
   async addArtist(id: string) {
     return await prisma.favoriteArtist.create({
       data: {
-        artistId: id
-      }
-    })
+        artistId: id,
+      },
+    });
   }
 
   async removeArtist(id: string) {
     return await prisma.favoriteArtist.delete({
       where: {
-        artistId: id
-      }
-    })
+        artistId: id,
+      },
+    });
   }
 }

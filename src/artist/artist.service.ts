@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { db } from '../fake-db';
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 @Injectable()
 export class ArtistService {
@@ -21,8 +20,8 @@ export class ArtistService {
     return await prisma.artist.findFirst({
       where: {
         id: id,
-      }
-    })
+      },
+    });
   }
 
   async update(id: string, updateArtistDto: UpdateArtistDto) {
@@ -30,10 +29,10 @@ export class ArtistService {
     if (!artist) return null;
     return await prisma.artist.update({
       where: {
-        id: id
+        id: id,
       },
-      data: updateArtistDto
-    })
+      data: updateArtistDto,
+    });
   }
 
   async remove(id: string) {
@@ -42,7 +41,7 @@ export class ArtistService {
     return await prisma.artist.delete({
       where: {
         id: id,
-      }
-    })
+      },
+    });
   }
 }

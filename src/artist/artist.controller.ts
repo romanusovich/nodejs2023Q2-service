@@ -38,7 +38,10 @@ export class ArtistController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateArtistDto: UpdateArtistDto,
+  ) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
     const artist = await this.artistService.update(id, updateArtistDto);
     if (!artist) throw new NotFoundException('artist is not found');

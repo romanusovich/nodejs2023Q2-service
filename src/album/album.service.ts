@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { db } from '../fake-db';
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 @Injectable()
 export class AlbumService {
   async create(createAlbumDto: CreateAlbumDto) {
     return await prisma.album.create({
-      data: createAlbumDto
+      data: createAlbumDto,
     });
   }
 
@@ -20,9 +19,9 @@ export class AlbumService {
   async findOne(id: string) {
     return await prisma.album.findFirst({
       where: {
-        id: id
-      }
-    })
+        id: id,
+      },
+    });
   }
 
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
@@ -30,10 +29,10 @@ export class AlbumService {
     if (!album) return null;
     return await prisma.album.update({
       where: {
-        id: id
+        id: id,
       },
-      data: updateAlbumDto
-    })
+      data: updateAlbumDto,
+    });
   }
 
   async remove(id: string) {
@@ -41,8 +40,8 @@ export class AlbumService {
     if (!album) return null;
     return await prisma.album.delete({
       where: {
-        id: id
-      }
-    })
+        id: id,
+      },
+    });
   }
 }

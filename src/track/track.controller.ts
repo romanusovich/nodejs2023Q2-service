@@ -38,7 +38,10 @@ export class TrackController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateTrackDto: UpdateTrackDto,
+  ) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
     const track = await this.trackService.update(id, updateTrackDto);
     if (!track) throw new NotFoundException('track is not found');

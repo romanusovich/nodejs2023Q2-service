@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { db } from '../fake-db';
-import { PrismaClient } from '@prisma/client'
-import { version } from 'os';
-const prisma = new PrismaClient()
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 @Injectable()
 export class UserService {
@@ -17,8 +15,8 @@ export class UserService {
         version: true,
         createdAt: true,
         updatedAt: true,
-      }
-    })
+      },
+    });
   }
 
   async findAll() {
@@ -29,7 +27,7 @@ export class UserService {
         version: true,
         createdAt: true,
         updatedAt: true,
-      }
+      },
     });
   }
 
@@ -44,7 +42,7 @@ export class UserService {
         version: true,
         createdAt: true,
         updatedAt: true,
-      }
+      },
     });
   }
 
@@ -52,10 +50,11 @@ export class UserService {
     const user = await prisma.user.findFirst({
       where: {
         id: id,
-      }
+      },
     });
     if (!user) return null;
-    if (user?.password !== updateUserDto.oldPassword) throw new Error('wrong password');
+    if (user?.password !== updateUserDto.oldPassword)
+      throw new Error('wrong password');
     return await prisma.user.update({
       where: {
         id: id,
@@ -70,7 +69,7 @@ export class UserService {
         version: true,
         createdAt: true,
         updatedAt: true,
-      }
+      },
     });
   }
 
@@ -80,7 +79,7 @@ export class UserService {
     return await prisma.user.delete({
       where: {
         id: id,
-      }
+      },
     });
   }
 }
