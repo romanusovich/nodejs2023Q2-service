@@ -2,26 +2,48 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { db } from '../fake-db';
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return db.createUser(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    return await prisma.user.create({
+      data: createUserDto,
+    })
   }
 
-  findAll() {
-    return db.findAllUsers();
+  async findAll() {
+    return await prisma.user.findMany();
   }
 
-  findOne(id: string) {
-    return db.findOneUser(id);
+  async findOne(id: string) {
+    return await prisma.user.findFirst({
+      where: {
+        id: id,
+      }
+    });
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return db.updateUser(id, updateUserDto);
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    if (!user) return null;
+    if (user?.password !== updateUserDto.oldPassword) throw new Error('wrong password');
+    return await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        password: updateUserDto.newPassword,
+      }
+    });
   }
 
-  remove(id: string) {
-    return db.removeUser(id);
+  async remove(id: string) {
+    return await prisma.user.delete({
+      where: {
+        id: id,
+      }
+    });
   }
 }
