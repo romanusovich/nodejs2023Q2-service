@@ -40,6 +40,8 @@ export class UserService {
   }
 
   async remove(id: string) {
+    const user = await this.findOne(id);
+    if (!user) return null;
     return await prisma.user.delete({
       where: {
         id: id,
