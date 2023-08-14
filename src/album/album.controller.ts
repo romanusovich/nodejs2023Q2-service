@@ -20,36 +20,36 @@ export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
   @Post()
-  create(@Body() createAlbumDto: CreateAlbumDto) {
-    return this.albumService.create(createAlbumDto);
+  async create(@Body() createAlbumDto: CreateAlbumDto) {
+    return await this.albumService.create(createAlbumDto);
   }
 
   @Get()
-  findAll() {
-    return this.albumService.findAll();
+  async findAll() {
+    return await this.albumService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const album = this.albumService.findOne(id);
+    const album = await this.albumService.findOne(id);
     if (!album) throw new NotFoundException('album is not found');
     else return album;
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
+  async update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const album = this.albumService.update(id, updateAlbumDto);
+    const album = await this.albumService.update(id, updateAlbumDto);
     if (!album) throw new NotFoundException('album is not found');
     else return album;
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const album = this.albumService.remove(id);
+    const album = await this.albumService.remove(id);
     if (!album) throw new NotFoundException('album is not found');
     else return album;
   }
