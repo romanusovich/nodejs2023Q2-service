@@ -20,36 +20,36 @@ export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 
   @Post()
-  create(@Body() createArtistDto: CreateArtistDto) {
-    return this.artistService.create(createArtistDto);
+  async create(@Body() createArtistDto: CreateArtistDto) {
+    return await this.artistService.create(createArtistDto);
   }
 
   @Get()
-  findAll() {
-    return this.artistService.findAll();
+  async findAll() {
+    return await this.artistService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const artist = this.artistService.findOne(id);
+    const artist = await this.artistService.findOne(id);
     if (!artist) throw new NotFoundException('artist is not found');
     else return artist;
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
+  async update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const artist = this.artistService.update(id, updateArtistDto);
+    const artist = await this.artistService.update(id, updateArtistDto);
     if (!artist) throw new NotFoundException('artist is not found');
     else return artist;
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const artist = this.artistService.remove(id);
+    const artist = await this.artistService.remove(id);
     if (!artist) throw new NotFoundException('artist is not found');
     else return 'deleted';
   }
