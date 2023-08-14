@@ -20,36 +20,36 @@ export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Post()
-  create(@Body() createTrackDto: CreateTrackDto) {
-    return this.trackService.create(createTrackDto);
+  async create(@Body() createTrackDto: CreateTrackDto) {
+    return await this.trackService.create(createTrackDto);
   }
 
   @Get()
-  findAll() {
-    return this.trackService.findAll();
+  async findAll() {
+    return await this.trackService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const track = this.trackService.findOne(id);
+    const track = await this.trackService.findOne(id);
     if (!track) throw new NotFoundException('track is not found');
     else return track;
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
+  async update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const track = this.trackService.update(id, updateTrackDto);
+    const track = await this.trackService.update(id, updateTrackDto);
     if (!track) throw new NotFoundException('track is not found');
     else return track;
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const track = this.trackService.remove(id);
+    const track = await this.trackService.remove(id);
     if (!track) throw new NotFoundException('track is not found');
     else return track;
   }
