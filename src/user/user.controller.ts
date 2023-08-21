@@ -21,38 +21,41 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.userService.create(createUserDto);
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll() {
+    return await this.userService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const user = this.userService.findOne(id);
+    const user = await this.userService.findOne(id);
     if (!user) throw new NotFoundException('user is not found');
     else return user;
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const user = this.userService.update(id, updateUserDto);
-    if (!user) throw new NotFoundException('user is not found');
-    if (user === 'wrong password')
+    let user;
+    try {
+      user = await this.userService.update(id, updateUserDto);
+    } catch {
       throw new ForbiddenException('old password is wrong');
-    else return user;
+    }
+    if (!user) throw new NotFoundException('user is not found');
+    return user;
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     if (!isUUID(id)) throw new BadRequestException('id is not uuid');
-    const user = this.userService.remove(id);
+    const user = await this.userService.remove(id);
     if (!user) throw new NotFoundException('user is not found');
     else return 'deleted';
   }
